@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DHT Readings</title>
+    <style type="text/css">
+        body {
+            background-color: #F5F5F5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .data-container {
+            display: flex;
+            justify-content: space-between;
+            width: 60%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #FFF;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .data-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .data-item h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .data-item p {
+            font-size: 48px;
+            font-weight: bold;
+            color: #6EB7FF;
+        }
+
+        .data-head {
+            margin: auto;
+            width: 50%;
+            text-align: center;
+            font-size: 45px;
+            font-weight: bold;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #FFF;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="data-head">Weather Monitering</div>
+
+    <div class="data-container">
+        <div class="data-item">
+            <h2>Temperature(^C)</h2>
+            <p class="value" id="temperature">Nothing</p>
+        </div>
+        <div class="data-item">
+            <h2>Humidity</h2>
+            <p class="value" id="humidity">Nothing</p>
+        </div>
+        <div class="data-item">
+            <h2>Smoke Level</h2>
+            <p class="value" id="smoke">Nothing</p>
+        </div>
+    </div>
+
+    <!-- Firebase App and Database scripts -->
+    <script type="module">
+        // Import necessary Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDheiTNWj2TXxRxnNEwdjwWVwcvXuiNgY",
+            authDomain: "rajveer-1e006.firebaseapp.com",
+            databaseURL: "https://rajveer-1e006-default-rtdb.firebaseio.com",
+            projectId: "rajveer-1e006",
+            storageBucket: "rajveer-1e006.firebasestorage.app",
+            messagingSenderId: "63561938856",
+            appId: "1:63561938856:web:11b323646e46fbf6a9cf9d",
+            measurementId: "G-3LHLE1G1KQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Get references to data paths
+        const dataRef1 = ref(database, 'DHTT/Temp');
+        const dataRef2 = ref(database, 'DHTT/Humidity/Humidity');
+        const dataRef3 = ref(database, 'SmokeS');
+        
+        // Fetch and display temperature data
+        onValue(dataRef1, (snapshot) => {
+            const temp = snapshot.val();
+            document.getElementById('temperature').innerHTML = temp || "No data";
+        });
+
+        // Fetch and display humidity data
+        onValue(dataRef2, (snapshot) => {
+            const humi = snapshot.val();
+            document.getElementById('humidity').innerHTML = humi || "No data";
+        });
+
+        // Fetch and display smoke data
+        onValue(dataRef3, (snapshot) => {
+            const smoke = snapshot.val();
+            document.getElementById('smoke').innerHTML = smoke || "No data";
+        });
+    </script>
+</body>
+
+</html>
